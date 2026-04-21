@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FernieX Оценка и опрос</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=SF+Pro+Display:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="ambient ambient-a"></div>
+  <div class="ambient ambient-b"></div>
+  <div class="ambient ambient-c"></div>
+
+  <main class="shell" id="app">
+    <section class="view view-active" id="userView">
+      <div class="hero-card glass">
+        <p class="eyebrow reveal reveal-1">FernieX Feedback</p>
+        <h1 class="hero-title reveal reveal-2">Оценка качества продукта и предложение идей.</h1>
+        <p class="hero-subtitle reveal reveal-3">Стильный мини-опрос для отзывов и обновлений FernieX. Всё с плавными анимациями и отправкой на сервер.</p>
+
+        <div class="entry-panel reveal reveal-4">
+          <label class="field-label" for="nicknameInput">Ваш ник</label>
+          <div class="identity-row">
+            <input id="nicknameInput" class="text-input" type="text" maxlength="40" placeholder="Введите никнейм">
+            <button id="anonymousToggle" class="incognito-toggle" type="button" aria-pressed="false">
+              <span class="toggle-track">
+                <span class="toggle-glow"></span>
+                <span class="toggle-thumb"></span>
+              </span>
+              <span class="toggle-labels">
+                <span>Обычно</span>
+                <span>Анонимно</span>
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <div class="action-grid reveal reveal-5">
+          <button class="action-card ios-card" data-start="review" type="button">
+            <span class="action-icon">★</span>
+            <span class="action-copy">
+              <strong>Оставить отзыв</strong>
+              <small>Три быстрые оценки сервиса</small>
+            </span>
+          </button>
+          <button class="action-card ios-card alt" data-start="idea" type="button">
+            <span class="action-icon">✦</span>
+            <span class="action-copy">
+              <strong>Предложить идею</strong>
+              <small>Опишите обновление или функцию</small>
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <section class="flow-card glass hidden" id="reviewFlow">
+        <div class="flow-user-chip" id="reviewUserChip"></div>
+        <div class="flow-head">
+          <h2>Оценка сервиса</h2>
+          <p>Ответьте на три коротких вопроса.</p>
+        </div>
+
+        <div class="question">
+          <p>1. Как вы оцениваете службу поддержки FernieX (/ask)</p>
+          <div class="stars" data-question="support"></div>
+        </div>
+
+        <div class="question">
+          <p>2. Как вы оцениваете функционал Telegram Бота FernieX?</p>
+          <div class="stars" data-question="bot"></div>
+        </div>
+
+        <div class="question">
+          <p>3. Как вы оцениваете все продукты, выпускаемые сервисом FernieX?</p>
+          <div class="stars" data-question="products"></div>
+        </div>
+
+        <div class="flow-actions">
+          <button class="ghost-btn" id="reviewBackBtn" type="button">Назад</button>
+          <button class="primary-btn" id="reviewSubmitBtn" type="button">Отправить оценку</button>
+        </div>
+      </section>
+
+      <section class="flow-card glass hidden" id="ideaFlow">
+        <div class="flow-user-chip" id="ideaUserChip"></div>
+        <div class="flow-head">
+          <h2>Предложения обновлений.</h2>
+          <p>Опишите идею так, как вам удобно.</p>
+        </div>
+
+        <label class="field-label" for="ideaInput">Текст идеи</label>
+        <textarea id="ideaInput" class="idea-input" maxlength="1200" placeholder="Например: добавить новые сценарии ответов, улучшить интерфейс, уведомления, аналитику..."></textarea>
+
+        <div class="flow-actions">
+          <button class="ghost-btn" id="ideaBackBtn" type="button">Назад</button>
+          <button class="primary-btn" id="ideaSubmitBtn" type="button">Отправить оценку</button>
+        </div>
+      </section>
+
+      <section class="success-card glass hidden" id="successScreen">
+        <div class="launch-scene">
+          <div class="star-flight"></div>
+          <div class="star-flight second"></div>
+          <div class="big-star">✦</div>
+        </div>
+        <h2 id="successTitle">Спасибо!</h2>
+        <p id="successText"></p>
+        <button class="primary-btn" id="restartBtn" type="button">Отправить ещё</button>
+      </section>
+    </section>
+
+    <section class="view hidden" id="adminView">
+      <div class="admin-wrap glass" id="adminLoginCard">
+        <p class="eyebrow">FernieX / Admin</p>
+        <h1 class="admin-title">Админ-панель отзывов</h1>
+        <p class="admin-subtitle">Введите пароль администратора. Хеш пароля хранится в Supabase.</p>
+        <input id="adminPassword" class="text-input admin-password" type="password" placeholder="Пароль">
+        <button id="adminLoginBtn" class="primary-btn" type="button">Войти</button>
+        <p class="status-text" id="adminLoginStatus"></p>
+      </div>
+
+      <div class="admin-panel glass hidden" id="adminPanel">
+        <div class="admin-topbar">
+          <div>
+            <p class="eyebrow">FernieX Feedback</p>
+            <h2>Панель управления</h2>
+          </div>
+          <div class="segmented">
+            <button class="segmented-btn active" data-admin-tab="reviews" type="button">Отзывы</button>
+            <button class="segmented-btn" data-admin-tab="ideas" type="button">Идеи</button>
+          </div>
+        </div>
+
+        <div class="admin-content">
+          <aside class="admin-list" id="adminList"></aside>
+          <article class="admin-detail" id="adminDetail">
+            <div class="placeholder-detail">
+              <span>✦</span>
+              <p>Нажмите на запись, чтобы посмотреть содержимое.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast"></div>
+  <script src="/app.js"></script>
+</body>
+</html>
