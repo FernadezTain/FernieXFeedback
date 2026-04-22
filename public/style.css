@@ -94,6 +94,15 @@ body.incognito {
   justify-content: center;
 }
 
+.flow-stage {
+  position: relative;
+  width: min(920px, 100%);
+  min-height: 760px;
+  display: grid;
+  place-items: center;
+  perspective: 1600px;
+}
+
 .glass {
   backdrop-filter: blur(28px);
   -webkit-backdrop-filter: blur(28px);
@@ -113,6 +122,19 @@ body.incognito {
 
 .hero-card {
   padding: 34px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-shine {
+  position: absolute;
+  inset: -35%;
+  background:
+    radial-gradient(circle at 20% 24%, rgba(255,255,255,0.2), transparent 20%),
+    radial-gradient(circle at 70% 30%, rgba(128,210,255,0.22), transparent 18%),
+    linear-gradient(115deg, transparent 35%, rgba(255,255,255,0.08) 50%, transparent 64%);
+  animation: slowSweep 9s linear infinite;
+  pointer-events: none;
 }
 
 .eyebrow {
@@ -145,6 +167,22 @@ body.incognito {
 .success-card,
 .admin-wrap {
   animation: rise 0.7s var(--transition);
+}
+
+.stage-panel {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  transform-origin: center center;
+}
+
+.panel-active {
+  animation: stageEnter 0.9s cubic-bezier(.16, 1, .3, 1) both;
+}
+
+.panel-leaving {
+  animation: stageLeave 0.55s cubic-bezier(.55, .02, .72, .19) both;
+  pointer-events: none;
 }
 
 .field-label {
@@ -333,8 +371,21 @@ body.incognito .toggle-thumb {
 
 .flow-card,
 .success-card {
-  margin-top: 22px;
   padding: 30px;
+  overflow: hidden;
+}
+
+.flow-card::before,
+.success-card::before {
+  content: "";
+  position: absolute;
+  inset: auto -10% 72% auto;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(134, 202, 255, 0.22), transparent 60%);
+  filter: blur(16px);
+  animation: pulseOrb 4s ease-in-out infinite;
 }
 
 .flow-user-chip {
@@ -360,6 +411,7 @@ body.incognito .toggle-thumb {
 
 .flow-head {
   margin: 16px 0 18px;
+  animation: contentLift 0.7s 0.1s both;
 }
 
 .flow-head p {
@@ -369,6 +421,14 @@ body.incognito .toggle-thumb {
 .question + .question {
   margin-top: 20px;
 }
+
+.question {
+  animation: contentLift 0.75s both;
+}
+
+.question:nth-of-type(1) { animation-delay: 0.14s; }
+.question:nth-of-type(2) { animation-delay: 0.22s; }
+.question:nth-of-type(3) { animation-delay: 0.3s; }
 
 .question p {
   margin: 0 0 14px;
@@ -391,6 +451,18 @@ body.incognito .toggle-thumb {
   font-size: 1.5rem;
   cursor: pointer;
   transition: transform 0.32s ease, background 0.32s ease, color 0.32s ease, box-shadow 0.32s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.star-btn::after {
+  content: "";
+  position: absolute;
+  inset: -30%;
+  background: radial-gradient(circle, rgba(255,255,255,0.35), transparent 45%);
+  opacity: 0;
+  transform: scale(0.3);
+  transition: 0.4s ease;
 }
 
 .star-btn.active {
@@ -400,11 +472,17 @@ body.incognito .toggle-thumb {
   transform: translateY(-2px) scale(1.06);
 }
 
+.star-btn.active::after {
+  opacity: 1;
+  transform: scale(1);
+}
+
 .flow-actions {
   display: flex;
   justify-content: space-between;
   gap: 12px;
   margin-top: 24px;
+  animation: contentLift 0.8s 0.4s both;
 }
 
 .ghost-btn,
@@ -462,7 +540,7 @@ body.incognito .toggle-thumb {
   font-size: 2.8rem;
   background: radial-gradient(circle, rgba(255, 228, 141, 0.3), rgba(255, 215, 106, 0.12));
   box-shadow: 0 0 55px rgba(255, 216, 111, 0.28);
-  animation: starPulse 1.5s ease-in-out infinite;
+  animation: starPulse 1.5s ease-in-out infinite, successRise 0.9s cubic-bezier(.16,1,.3,1);
 }
 
 .star-flight {
@@ -481,6 +559,16 @@ body.incognito .toggle-thumb {
   top: 86px;
   animation-delay: 0.22s;
 }
+
+.success-card h2,
+.success-card p,
+.success-card .primary-btn {
+  animation: contentLift 0.8s both;
+}
+
+.success-card h2 { animation-delay: 0.18s; }
+.success-card p { animation-delay: 0.28s; }
+.success-card .primary-btn { animation-delay: 0.4s; }
 
 .admin-wrap {
   max-width: 540px;
@@ -685,6 +773,48 @@ body.incognito .toggle-thumb {
   }
 }
 
+@keyframes stageEnter {
+  0% {
+    opacity: 0;
+    transform: translateY(48px) scale(0.92) rotateX(10deg);
+    filter: blur(12px);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-8px) scale(1.01) rotateX(0deg);
+    filter: blur(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotateX(0deg);
+    filter: blur(0);
+  }
+}
+
+@keyframes stageLeave {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotateX(0deg);
+    filter: blur(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.95) rotateX(-8deg);
+    filter: blur(10px);
+  }
+}
+
+@keyframes contentLift {
+  0% {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @keyframes drift {
   from { transform: translate3d(0, 0, 0); }
   to { transform: translate3d(0, 26px, 0); }
@@ -701,12 +831,37 @@ body.incognito .toggle-thumb {
   50% { transform: scale(1.08); }
 }
 
+@keyframes successRise {
+  0% {
+    opacity: 0;
+    transform: translateY(36px) scale(0.8) rotate(-16deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotate(0deg);
+  }
+}
+
+@keyframes pulseOrb {
+  0%, 100% { transform: scale(0.96); opacity: 0.65; }
+  50% { transform: scale(1.08); opacity: 1; }
+}
+
+@keyframes slowSweep {
+  from { transform: translateX(-8%) rotate(0deg); }
+  to { transform: translateX(8%) rotate(10deg); }
+}
+
 @media (max-width: 860px) {
   .identity-row,
   .action-grid,
   .admin-content,
   .rating-grid {
     grid-template-columns: 1fr;
+  }
+
+  .flow-stage {
+    min-height: 860px;
   }
 
   .hero-card,
