@@ -16,47 +16,49 @@
 
   <main class="shell" id="app">
     <section class="view view-active" id="userView">
-      <div class="hero-card glass">
-        <p class="eyebrow reveal reveal-1">FernieX Feedback</p>
-        <h1 class="hero-title reveal reveal-2">Оценка качества продукта и предложение идей.</h1>
-        <p class="hero-subtitle reveal reveal-3">Стильный мини-опрос для отзывов и обновлений FernieX. Всё с плавными анимациями и отправкой на сервер.</p>
+      <div class="flow-stage" id="flowStage">
+        <div class="hero-card glass stage-panel panel-active" id="heroCard">
+          <div class="hero-shine"></div>
+          <p class="eyebrow reveal reveal-1">FernieX Feedback</p>
+          <h1 class="hero-title reveal reveal-2">Оценка качества продукта и предложение идей.</h1>
+          <p class="hero-subtitle reveal reveal-3">Стильный мини-опрос для отзывов и обновлений FernieX. Всё с плавными анимациями и отправкой на сервер.</p>
 
-        <div class="entry-panel reveal reveal-4">
-          <label class="field-label" for="nicknameInput">Ваш ник</label>
-          <div class="identity-row">
-            <input id="nicknameInput" class="text-input" type="text" maxlength="40" placeholder="Введите никнейм">
-            <button id="anonymousToggle" class="incognito-toggle" type="button" aria-pressed="false">
-              <span class="toggle-track">
-                <span class="toggle-glow"></span>
-                <span class="toggle-thumb"></span>
+          <div class="entry-panel reveal reveal-4">
+            <label class="field-label" for="nicknameInput">Ваш ник</label>
+            <div class="identity-row">
+              <input id="nicknameInput" class="text-input" type="text" maxlength="40" placeholder="Введите никнейм">
+              <button id="anonymousToggle" class="incognito-toggle" type="button" aria-pressed="false">
+                <span class="toggle-track">
+                  <span class="toggle-glow"></span>
+                  <span class="toggle-thumb"></span>
+                </span>
+                <span class="toggle-labels">
+                  <span>Обычно</span>
+                  <span>Анонимно</span>
+                </span>
+              </button>
+            </div>
+          </div>
+
+          <div class="action-grid reveal reveal-5">
+            <button class="action-card ios-card" data-start="review" type="button">
+              <span class="action-icon">★</span>
+              <span class="action-copy">
+                <strong>Оставить отзыв</strong>
+                <small>Три быстрые оценки сервиса</small>
               </span>
-              <span class="toggle-labels">
-                <span>Обычно</span>
-                <span>Анонимно</span>
+            </button>
+            <button class="action-card ios-card alt" data-start="idea" type="button">
+              <span class="action-icon">✦</span>
+              <span class="action-copy">
+                <strong>Предложить идею</strong>
+                <small>Опишите обновление или функцию</small>
               </span>
             </button>
           </div>
         </div>
 
-        <div class="action-grid reveal reveal-5">
-          <button class="action-card ios-card" data-start="review" type="button">
-            <span class="action-icon">★</span>
-            <span class="action-copy">
-              <strong>Оставить отзыв</strong>
-              <small>Три быстрые оценки сервиса</small>
-            </span>
-          </button>
-          <button class="action-card ios-card alt" data-start="idea" type="button">
-            <span class="action-icon">✦</span>
-            <span class="action-copy">
-              <strong>Предложить идею</strong>
-              <small>Опишите обновление или функцию</small>
-            </span>
-          </button>
-        </div>
-      </div>
-
-      <section class="flow-card glass hidden" id="reviewFlow">
+      <section class="flow-card glass stage-panel hidden" id="reviewFlow">
         <div class="flow-user-chip" id="reviewUserChip"></div>
         <div class="flow-head">
           <h2>Оценка сервиса</h2>
@@ -84,7 +86,7 @@
         </div>
       </section>
 
-      <section class="flow-card glass hidden" id="ideaFlow">
+      <section class="flow-card glass stage-panel hidden" id="ideaFlow">
         <div class="flow-user-chip" id="ideaUserChip"></div>
         <div class="flow-head">
           <h2>Предложения обновлений.</h2>
@@ -100,7 +102,7 @@
         </div>
       </section>
 
-      <section class="success-card glass hidden" id="successScreen">
+      <section class="success-card glass stage-panel hidden" id="successScreen">
         <div class="launch-scene">
           <div class="star-flight"></div>
           <div class="star-flight second"></div>
@@ -110,6 +112,7 @@
         <p id="successText"></p>
         <button class="primary-btn" id="restartBtn" type="button">Отправить ещё</button>
       </section>
+      </div>
     </section>
 
     <section class="view hidden" id="adminView">
