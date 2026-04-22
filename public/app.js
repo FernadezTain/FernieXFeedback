@@ -14,6 +14,8 @@ const isAdminPage = window.location.pathname === "/admin";
 
 const els = {
   body: document.body,
+  flowStage: document.getElementById("flowStage"),
+  heroCard: document.getElementById("heroCard"),
   nicknameInput: document.getElementById("nicknameInput"),
   anonymousToggle: document.getElementById("anonymousToggle"),
   reviewFlow: document.getElementById("reviewFlow"),
@@ -81,9 +83,31 @@ function setAnonymous(value) {
 }
 
 function hideAllFlows() {
-  els.reviewFlow.classList.add("hidden");
-  els.ideaFlow.classList.add("hidden");
-  els.successScreen.classList.add("hidden");
+  [els.reviewFlow, els.ideaFlow, els.successScreen].forEach((panel) => {
+    panel.classList.add("hidden");
+    panel.classList.remove("panel-active", "panel-leaving");
+  });
+}
+
+function animatePanelSwap(nextPanel = null) {
+  const panels = [els.heroCard, els.reviewFlow, els.ideaFlow, els.successScreen];
+  const current = panels.find((panel) => !panel.classList.contains("hidden"));
+
+  if (current && current !== nextPanel) {
+    current.classList.remove("panel-active");
+    current.classList.add("panel-leaving");
+    setTimeout(() => {
+      current.classList.add("hidden");
+      current.classList.remove("panel-leaving");
+    }, 520);
+  }
+
+  if (nextPanel) {
+    nextPanel.classList.remove("hidden", "panel-leaving");
+    nextPanel.classList.remove("panel-active");
+    void nextPanel.offsetWidth;
+    nextPanel.classList.add("panel-active");
+  }
 }
 
 function resetUserFlows() {
@@ -91,18 +115,18 @@ function resetUserFlows() {
   state.ratings = { support: 0, bot: 0, products: 0 };
   els.ideaInput.value = "";
   hideAllFlows();
+  animatePanelSwap(els.heroCard);
   renderStars();
 }
 
 function openFlow(type) {
-  hideAllFlows();
   updateIdentity();
   state.currentType = type;
   if (!state.anonymous && !els.nicknameInput.value.trim()) {
     showToast("Можно оставить ник или включить анонимный режим");
   }
-  if (type === "review") els.reviewFlow.classList.remove("hidden");
-  if (type === "idea") els.ideaFlow.classList.remove("hidden");
+  if (type === "review") animatePanelSwap(els.reviewFlow);
+  if (type === "idea") animatePanelSwap(els.ideaFlow);
 }
 
 function createStar(question, index) {
@@ -223,10 +247,9 @@ async function submitIdea() {
 }
 
 function openSuccess(title, text) {
-  hideAllFlows();
   els.successTitle.textContent = title;
   els.successText.textContent = text;
-  els.successScreen.classList.remove("hidden");
+  animatePanelSwap(els.successScreen);
 }
 
 function renderAdminList(items, type) {
